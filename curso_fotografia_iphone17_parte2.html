@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fotografía iPhone 17 — Lenguaje Técnico</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #080808;
+  --deep: #0f0f0f;
+  --card: #141414;
+  --card2: #191919;
+  --border: #272727;
+  --gold: #c9a84c;
+  --gold-light: #f0c96a;
+  --cream: #f2ede4;
+  --white: #ffffff;
+  --muted: #7a7a7a;
+  --muted2: #555;
+  --cyan: #4fc8d4;
+  --orange: #e07840;
+  --purple: #8b6acd;
+  --green: #5ec87a;
+  --red: #e05858;
+  --blue: #4a90e2;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body {
+  background: var(--black);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* GRAIN */
+.grain {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 200;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px;
+}
+
+/* PROGRESS */
+.progress-wrap { position: fixed; top:0; left:0; width:100%; height:2px; background:var(--border); z-index:300; }
+.progress-fill { height:100%; background: linear-gradient(90deg, var(--gold), var(--cyan)); width:0%; transition: width .4s; }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 6rem 5rem 5rem;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 50% 60% at 85% 40%, rgba(79,200,212,.09) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 50% at 5% 80%, rgba(201,168,76,.07) 0%, transparent 60%);
+}
+.hero-badge {
+  display:inline-flex; align-items:center; gap:.6rem;
+  font-family:'Space Mono',monospace; font-size:.65rem; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--cyan);
+  margin-bottom:2rem;
+  animation: fadeUp .7s ease both;
+}
+.hero-badge::before{ content:''; width:2rem; height:1px; background:var(--cyan); }
+.hero-part {
+  font-family:'Space Mono',monospace; font-size:.7rem; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--muted); margin-bottom:.75rem;
+  animation: fadeUp .7s .05s ease both;
+}
+.hero-title {
+  font-family:'Playfair Display',serif;
+  font-size: clamp(2.8rem, 7vw, 6.5rem);
+  font-weight:900; line-height:.95; letter-spacing:-.02em;
+  max-width:13ch;
+  animation: fadeUp .7s .1s ease both;
+}
+.hero-title em { font-style:italic; color:var(--cyan); }
+.hero-sub {
+  margin-top:2rem; max-width:48ch; font-size:1.05rem;
+  color:var(--muted); font-weight:300; line-height:1.75;
+  animation: fadeUp .7s .2s ease both;
+}
+.hero-stats {
+  margin-top:3rem; display:flex; gap:3rem; flex-wrap:wrap;
+  animation: fadeUp .7s .3s ease both;
+}
+.stat { display:flex; flex-direction:column; gap:.2rem; }
+.stat-n { font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:var(--cream); }
+.stat-l { font-family:'Space Mono',monospace; font-size:.6rem; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+.hero-actions { margin-top:3rem; display:flex; gap:1rem; flex-wrap:wrap; animation: fadeUp .7s .4s ease both; }
+.btn-p { padding:.85rem 2rem; background:var(--cyan); color:var(--black); font-weight:700; font-size:.8rem; letter-spacing:.06em; text-transform:uppercase; border:none; cursor:pointer; font-family:'Space Mono',monospace; transition:all .3s; }
+.btn-p:hover { background:#72dde8; transform:translateY(-2px); }
+.btn-g { padding:.85rem 2rem; background:transparent; color:var(--cream); font-size:.8rem; letter-spacing:.06em; text-transform:uppercase; border:1px solid var(--border); cursor:pointer; font-family:'Space Mono',monospace; transition:all .3s; }
+.btn-g:hover { border-color:var(--cyan); color:var(--cyan); }
+.hero-bg-text {
+  position:absolute; right:3rem; bottom:2rem;
+  font-family:'Playfair Display',serif; font-size:20vw; font-weight:900;
+  color:transparent; -webkit-text-stroke:1px rgba(79,200,212,.05);
+  pointer-events:none; line-height:1; animation: fadeUp 1s .5s ease both;
+}
+
+/* NAV */
+.sticky-nav {
+  position:sticky; top:0; z-index:100;
+  background:rgba(8,8,8,.96); backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex; overflow-x:auto; scrollbar-width:none;
+  padding:0 2rem;
+}
+.sticky-nav::-webkit-scrollbar{display:none;}
+.nav-btn {
+  padding:.9rem 1.2rem;
+  font-family:'Space Mono',monospace; font-size:.6rem;
+  letter-spacing:.15em; text-transform:uppercase;
+  color:var(--muted); cursor:pointer; white-space:nowrap;
+  border:none; border-bottom:2px solid transparent;
+  background:none; transition:all .25s;
+}
+.nav-btn:hover { color:var(--cream); }
+.nav-btn.active { color:var(--cyan); border-bottom-color:var(--cyan); }
+
+/* SECTIONS */
+.section { display:none; padding:5rem; }
+.section.active { display:block; animation: fadeUp .4s ease both; }
+.sec-eyebrow {
+  font-family:'Space Mono',monospace; font-size:.62rem;
+  letter-spacing:.22em; color:var(--cyan); text-transform:uppercase;
+  margin-bottom:1rem; display:flex; align-items:center; gap:.6rem;
+}
+.sec-eyebrow::before{content:'';width:1.8rem;height:1px;background:var(--cyan);}
+.sec-title {
+  font-family:'Playfair Display',serif;
+  font-size: clamp(2rem,4vw,3.4rem); font-weight:900; line-height:1.05;
+  margin-bottom:1rem;
+}
+.sec-desc { color:var(--muted); font-size:1rem; font-weight:300; line-height:1.75; max-width:55ch; margin-bottom:3rem; }
+
+/* TERM CARDS (big glossary style) */
+.term-block {
+  border:1px solid var(--border); margin-bottom:1.5px;
+  transition: border-color .3s;
+}
+.term-block:hover { border-color:rgba(79,200,212,.25); }
+.term-header {
+  padding:2rem 2.5rem; display:flex; justify-content:space-between; align-items:flex-start;
+  cursor:pointer; user-select:none; gap:2rem;
+}
+.term-left { flex:1; }
+.term-abbr {
+  font-family:'Space Mono',monospace; font-size:.62rem; letter-spacing:.2em;
+  text-transform:uppercase; margin-bottom:.6rem; display:inline-block;
+  padding:.3rem .7rem; border:1px solid;
+}
+.term-name {
+  font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700;
+  line-height:1.2; margin-bottom:.5rem;
+}
+.term-oneliner { font-size:.9rem; color:var(--muted); font-weight:300; }
+.term-icon { font-size:2rem; flex-shrink:0; opacity:.7; }
+.expand-ico { font-size:1.1rem; color:var(--cyan); transition:transform .3s; flex-shrink:0; margin-top:.2rem; }
+.term-block.open .expand-ico { transform:rotate(45deg); }
+.term-body { max-height:0; overflow:hidden; transition:max-height .5s ease; }
+.term-block.open .term-body { max-height:2000px; }
+.term-inner { padding:0 2.5rem 2.5rem; border-top:1px solid var(--border); }
+
+/* ACCENT COLORS PER TERM */
+.tc-gold .term-abbr { color:var(--gold); border-color:rgba(201,168,76,.4); }
+.tc-cyan .term-abbr { color:var(--cyan); border-color:rgba(79,200,212,.4); }
+.tc-orange .term-abbr { color:var(--orange); border-color:rgba(224,120,64,.4); }
+.tc-purple .term-abbr { color:var(--purple); border-color:rgba(139,106,205,.4); }
+.tc-green .term-abbr { color:var(--green); border-color:rgba(94,200,122,.4); }
+.tc-blue .term-abbr { color:var(--blue); border-color:rgba(74,144,226,.4); }
+.tc-red .term-abbr { color:var(--red); border-color:rgba(224,88,88,.4); }
+
+/* VISUAL DEMOS inside terms */
+.demo-box {
+  background:var(--deep); border:1px solid var(--border);
+  padding:2rem; margin:1.5rem 0; border-radius:2px;
+}
+.demo-title {
+  font-family:'Space Mono',monospace; font-size:.6rem;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--muted);
+  margin-bottom:1.25rem; padding-bottom:1rem; border-bottom:1px solid var(--border);
+}
+
+/* EXPOSURE SLIDER DEMO */
+.exp-demo { display:flex; flex-direction:column; gap:1rem; }
+.exp-scene {
+  width:100%; height:100px; border-radius:2px; position:relative;
+  overflow:hidden; transition:filter .1s;
+  background: linear-gradient(135deg, #1a1a2e 0%, #3a3a5e 40%, #7a7aae 80%, #d0d0e8 100%);
+  display:flex; align-items:center; justify-content:center;
+}
+.exp-sil {
+  width:40px; height:60px; background:rgba(0,0,0,.6);
+  border-radius:3px 3px 0 0; position:relative;
+}
+.exp-sil::before {
+  content:''; position:absolute; top:-16px; left:50%; transform:translateX(-50%);
+  width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,.6);
+}
+.exp-slider-wrap { display:flex; align-items:center; gap:1rem; }
+.exp-label { font-family:'Space Mono',monospace; font-size:.65rem; color:var(--muted); flex-shrink:0; width:3rem; }
+.exp-val { font-family:'Space Mono',monospace; font-size:.7rem; color:var(--cyan); flex-shrink:0; width:3.5rem; text-align:right; }
+input[type=range] {
+  flex:1; -webkit-appearance:none; height:2px; background:var(--border);
+  border-radius:1px; outline:none; cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance:none; width:14px; height:14px;
+  border-radius:50%; background:var(--cyan); cursor:pointer;
+  box-shadow:0 0 8px rgba(79,200,212,.5);
+}
+.exp-hint { font-size:.8rem; color:var(--muted); font-style:italic; margin-top:.5rem; }
+
+/* APERTURE DEMO */
+.aperture-demo { display:flex; flex-direction:column; gap:1.2rem; }
+.aperture-visual { display:flex; align-items:center; justify-content:center; padding:1.5rem 0; gap:3rem; }
+.aperture-circle {
+  position:relative; display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:.5rem;
+}
+.aperture-ring {
+  width:80px; height:80px; border-radius:50%;
+  border:2px solid var(--gold); position:relative;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .4s;
+}
+.aperture-hole {
+  border-radius:50%; background:rgba(0,0,0,.9);
+  transition:all .4s;
+}
+.aperture-label {
+  font-family:'Playfair Display',serif; font-size:1rem; font-weight:700;
+  text-align:center;
+}
+.aperture-sub { font-family:'Space Mono',monospace; font-size:.6rem; color:var(--muted); text-align:center; }
+.aperture-arrow { font-size:1.2rem; color:var(--border); }
+.ap-slider-wrap { display:flex; align-items:center; gap:1rem; }
+.ap-label { font-family:'Space Mono',monospace; font-size:.6rem; color:var(--muted); }
+
+/* HDR COMPARE */
+.hdr-compare {
+  display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border);
+  border:1px solid var(--border); margin:1.5rem 0;
+}
+.hdr-pane {
+  background:var(--card); padding:1.75rem; text-align:center;
+}
+.hdr-visual {
+  width:100%; height:90px; border-radius:2px; margin-bottom:1.25rem;
+  position:relative; overflow:hidden; display:flex;
+}
+.hdr-half { flex:1; display:flex; align-items:center; justify-content:center; }
+.hdr-label-tag {
+  font-family:'Space Mono',monospace; font-size:.6rem; letter-spacing:.15em;
+  text-transform:uppercase; padding:.3rem .7rem; border:1px solid; display:inline-block; margin-bottom:1rem;
+}
+.hdr-title { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; margin-bottom:.75rem; }
+.hdr-desc { font-size:.82rem; color:var(--muted); font-weight:300; line-height:1.6; }
+.check { color:var(--green); }
+.cross { color:var(--red); }
+
+/* LOG CURVE */
+.curve-wrap { position:relative; width:100%; height:180px; background:var(--deep); border:1px solid var(--border); margin:1.5rem 0; }
+.curve-wrap svg { width:100%; height:100%; }
+
+/* RESOLUTION TABLE */
+.res-table { width:100%; border-collapse:collapse; margin:1.5rem 0; }
+.res-table th {
+  font-family:'Space Mono',monospace; font-size:.6rem; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--muted); padding:.75rem 1rem;
+  text-align:left; border-bottom:1px solid var(--border); background:var(--deep);
+}
+.res-table td {
+  padding:.85rem 1rem; font-size:.875rem; border-bottom:1px solid var(--border);
+  vertical-align:top; line-height:1.5;
+}
+.res-table tr:hover td { background:var(--card); }
+.res-table tr:last-child td { border-bottom:none; }
+.res-badge {
+  font-family:'Space Mono',monospace; font-size:.6rem; letter-spacing:.1em;
+  padding:.2rem .5rem; border:1px solid; display:inline-block; margin-bottom:.2rem;
+}
+
+/* ISO VISUAL */
+.iso-strip {
+  display:flex; height:60px; border:1px solid var(--border); overflow:hidden;
+  margin:1.5rem 0; border-radius:2px;
+}
+.iso-seg { flex:1; display:flex; align-items:center; justify-content:center; position:relative; cursor:default; }
+.iso-seg span { font-family:'Space Mono',monospace; font-size:.55rem; text-align:center; z-index:1; }
+
+/* WHITE BALANCE STRIP */
+.wb-strip {
+  display:flex; height:70px; border:1px solid var(--border);
+  margin:1.5rem 0; overflow:hidden; border-radius:2px;
+}
+.wb-seg {
+  flex:1; display:flex; align-items:flex-end; justify-content:center;
+  padding-bottom:.6rem; cursor:pointer; transition:flex .4s;
+  position:relative;
+}
+.wb-seg:hover { flex:2; }
+.wb-seg span {
+  font-family:'Space Mono',monospace; font-size:.5rem; letter-spacing:.08em;
+  text-transform:uppercase; text-align:center; line-height:1.3;
+  color:rgba(255,255,255,.7);
+}
+
+/* WHEN TO USE GRID */
+.use-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+  gap:1px; background:var(--border); border:1px solid var(--border); margin:1.5rem 0;
+}
+.use-card { background:var(--card); padding:1.75rem; transition:background .3s; }
+.use-card:hover { background:var(--card2); }
+.use-scenario {
+  font-family:'Space Mono',monospace; font-size:.58rem; letter-spacing:.15em;
+  text-transform:uppercase; margin-bottom:.8rem;
+  padding:.25rem .6rem; border:1px solid var(--border); display:inline-block; color:var(--muted);
+}
+.use-title { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; margin-bottom:.5rem; }
+.use-text { font-size:.85rem; color:var(--muted); font-weight:300; line-height:1.6; }
+
+/* RULE BLOCK */
+.rule { border-left:2px solid var(--cyan); padding:1.25rem 1.75rem; margin:1.5rem 0; background:rgba(79,200,212,.04); }
+.rule-eye { font-family:'Space Mono',monospace; font-size:.58rem; letter-spacing:.18em; text-transform:uppercase; color:var(--cyan); margin-bottom:.6rem; }
+.rule p { font-size:.95rem; color:var(--cream); line-height:1.7; font-weight:300; }
+
+/* QUOTE */
+.quote {
+  padding:2.5rem; margin:2.5rem 0;
+  background:linear-gradient(135deg,rgba(79,200,212,.06),rgba(79,200,212,.01));
+  border:1px solid rgba(79,200,212,.18); position:relative; text-align:center;
+}
+.quote::before {
+  content:'"'; font-family:'Playfair Display',serif; font-size:7rem;
+  color:rgba(79,200,212,.08); position:absolute; top:-1.5rem; left:2rem; line-height:1; pointer-events:none;
+}
+.quote p { font-family:'Playfair Display',serif; font-size:1.3rem; font-style:italic; line-height:1.6; position:relative; z-index:1; }
+
+/* COMPARISON TOGGLE (SDR vs HDR) */
+.toggle-compare { margin:1.5rem 0; }
+.tc-btns { display:flex; gap:0; margin-bottom:0; border:1px solid var(--border); width:fit-content; }
+.tc-btn {
+  padding:.6rem 1.5rem; font-family:'Space Mono',monospace; font-size:.62rem;
+  letter-spacing:.12em; text-transform:uppercase; background:none;
+  color:var(--muted); border:none; cursor:pointer; transition:all .25s;
+}
+.tc-btn.active { background:var(--cyan); color:var(--black); font-weight:700; }
+.tc-panel { display:none; background:var(--card); border:1px solid var(--border); border-top:none; padding:2rem; }
+.tc-panel.active { display:block; animation:fadeUp .3s ease both; }
+
+/* SHUTTER SPEED VISUAL */
+.ss-visual { display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; margin:1.5rem 0; }
+.ss-card {
+  flex:1; min-width:120px; background:var(--deep); border:1px solid var(--border);
+  padding:1.25rem; text-align:center; position:relative; overflow:hidden;
+}
+.ss-motion {
+  height:40px; margin-bottom:1rem; display:flex; align-items:center; justify-content:center; overflow:hidden;
+}
+.ss-dot {
+  width:12px; height:12px; border-radius:50%; background:var(--cyan);
+}
+.ss-dot.frozen {}
+.ss-dot.slight { box-shadow:8px 0 12px var(--cyan); margin-left:-8px; }
+.ss-dot.blurry {
+  width:60px; height:6px; border-radius:3px;
+  background:linear-gradient(90deg, transparent, var(--cyan), transparent);
+}
+.ss-value { font-family:'Space Mono',monospace; font-size:.75rem; color:var(--gold); margin-bottom:.4rem; }
+.ss-name { font-size:.8rem; color:var(--cream); margin-bottom:.3rem; font-weight:500; }
+.ss-use { font-size:.75rem; color:var(--muted); }
+
+/* FOCAL LENGTH PERSPECTIVE DEMO */
+.fl-demo { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin:1.5rem 0; }
+.fl-card { background:var(--card); padding:1.5rem; position:relative; overflow:hidden; }
+.fl-visual { height:100px; margin-bottom:1.25rem; position:relative; display:flex; align-items:flex-end; justify-content:center; }
+.fl-fov-line { position:absolute; bottom:0; left:50%; height:70px; border-left:1px dashed rgba(79,200,212,.3); }
+.fl-val { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:900; text-align:center; margin-bottom:.3rem; }
+.fl-name { font-family:'Space Mono',monospace; font-size:.58rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); text-align:center; margin-bottom:.75rem; }
+.fl-list { list-style:none; font-size:.8rem; color:var(--muted); display:flex; flex-direction:column; gap:.3rem; }
+.fl-list li::before { content:'→ '; color:var(--cyan); }
+
+/* EXERCISE */
+.exercise {
+  background:var(--card); border:1px solid var(--border);
+  padding:2.25rem; margin:2rem 0; position:relative;
+}
+.exercise::before {
+  content:'EJERCICIO PRÁCTICO'; font-family:'Space Mono',monospace;
+  font-size:.58rem; letter-spacing:.22em; color:var(--cyan);
+  display:block; margin-bottom:1.25rem; padding-bottom:1.25rem;
+  border-bottom:1px solid var(--border);
+}
+.exercise h3 { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; margin-bottom:1rem; }
+.exercise ul { list-style:none; display:flex; flex-direction:column; gap:.65rem; counter-reset:step; }
+.exercise ul li { display:flex; gap:.9rem; counter-increment:step; font-size:.88rem; color:var(--muted); line-height:1.55; }
+.exercise ul li::before { content:counter(step,decimal-leading-zero); font-family:'Space Mono',monospace; font-size:.7rem; color:var(--cyan); flex-shrink:0; margin-top:.1rem; }
+
+/* TRIANGLE DIAGRAM (exposure triangle) */
+.triangle-wrap {
+  display:flex; align-items:center; justify-content:center;
+  padding:2.5rem 0; margin:1.5rem 0;
+}
+.tri-svg { width:100%; max-width:420px; }
+
+/* FULL CHEAT SHEET */
+.cheat-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:1px; background:var(--border); border:1px solid var(--border); margin:2rem 0;
+}
+.cheat-card { background:var(--card); padding:2rem; }
+.cheat-term {
+  font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700;
+  margin-bottom:.3rem; display:flex; align-items:center; gap:.75rem;
+}
+.cheat-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.cheat-abbr { font-family:'Space Mono',monospace; font-size:.6rem; letter-spacing:.12em; color:var(--muted); margin-bottom:.75rem; }
+.cheat-def { font-size:.82rem; color:var(--muted); font-weight:300; line-height:1.6; margin-bottom:.75rem; }
+.cheat-when {
+  font-family:'Space Mono',monospace; font-size:.58rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--cyan); margin-bottom:.4rem;
+}
+.cheat-use { font-size:.82rem; color:var(--cream); line-height:1.6; font-weight:300; }
+
+/* FOOT */
+.footer {
+  padding:3rem 5rem; border-top:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;
+}
+.footer-brand { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; }
+.footer-meta { font-family:'Space Mono',monospace; font-size:.6rem; color:var(--muted); letter-spacing:.08em; text-align:right; }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .hero,.section{padding:3rem 1.5rem;}
+  .sticky-nav{padding:0 .5rem;}
+  .hdr-compare{grid-template-columns:1fr;}
+  .fl-demo{grid-template-columns:1fr;}
+  .ss-visual{flex-direction:column;}
+  .hero-bg-text{display:none;}
+  .footer{flex-direction:column;text-align:center;}
+  .footer-meta{text-align:center;}
+  .hero-stats{gap:1.5rem;}
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--black);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+::-webkit-scrollbar-thumb:hover{background:var(--cyan);}
+
+/* INFO PILLS */
+.pill-row { display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0; }
+.pill {
+  font-family:'Space Mono',monospace; font-size:.6rem; letter-spacing:.1em;
+  text-transform:uppercase; padding:.3rem .8rem; border:1px solid var(--border);
+  color:var(--muted); border-radius:1px;
+}
+.pill.yes { border-color:rgba(94,200,122,.4); color:var(--green); }
+.pill.no  { border-color:rgba(224,88,88,.4); color:var(--red); }
+.pill.maybe { border-color:rgba(201,168,76,.4); color:var(--gold); }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="progress-wrap"><div class="progress-fill" id="pBar"></div></div>
+
+<!-- HERO -->
+<section class="hero" id="heroSec">
+  <div class="hero-badge">iPhone 17 · Parte 2</div>
+  <div class="hero-part">Lenguaje Técnico Fotográfico</div>
+  <h1 class="hero-title">Habla el<br><em>idioma</em><br>de la imagen.</h1>
+  <p class="hero-sub">Entender los términos técnicos no es memorizar definiciones. Es tener el vocabulario para tomar decisiones visuales con claridad y criterio.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-n">18</span><span class="stat-l">Términos</span></div>
+    <div class="stat"><span class="stat-n">6</span><span class="stat-l">Módulos</span></div>
+    <div class="stat"><span class="stat-n">100%</span><span class="stat-l">Aplicado</span></div>
+  </div>
+  <div class="hero-actions">
+    <button class="btn-p" onclick="goTo('glosario')">Ver Glosario</button>
+    <button class="btn-g" onclick="goTo('exposicion')">Empezar: Exposición</button>
+  </div>
+  <div class="hero-bg-text">T</div>
+</section>
+
+<!-- NAV -->
+<nav class="sticky-nav" id="mainNav">
+  <button class="nav-btn" onclick="goTo('glosario')">Glosario</button>
+  <button class="nav-btn" onclick="goTo('exposicion')">Exposición</button>
+  <button class="nav-btn" onclick="goTo('apertura')">Apertura f/</button>
+  <button class="nav-btn" onclick="goTo('iso')">ISO</button>
+  <button class="nav-btn" onclick="goTo('resolucion')">Resolución</button>
+  <button class="nav-btn" onclick="goTo('hdr-sdr')">HDR · SDR</button>
+  <button class="nav-btn" onclick="goTo('log')">Log · RAW</button>
+  <button class="nav-btn" onclick="goTo('balance')">Bal. de Blancos</button>
+  <button class="nav-btn" onclick="goTo('velocidad')">Vel. Obturación</button>
+  <button class="nav-btn" onclick="goTo('triangulo')">Triángulo Exp.</button>
+  <button class="nav-btn" onclick="goTo('cheatsheet')">Cheat Sheet</button>
+</nav>
+
+<!-- ═══════════════════════════════════════
+  GLOSARIO RÁPIDO
+════════════════════════════════════════════ -->
+<section class="section" id="tab-glosario">
+  <div class="sec-eyebrow">Parte 2 · Lenguaje Técnico</div>
+  <h2 class="sec-title">El vocabulario<br>del fotógrafo</h2>
+  <p class="sec-desc">Cada término que encuentras en este módulo tiene una definición simple, una analogía visual y una guía de cuándo usarlo en tu iPhone 17.</p>
+
+  <!-- BIG TERM BLOCKS -->
+
+  <div class="term-block tc-gold open">
+    <div class="term-header" onclick="toggleTerm(this)">
+      <div class="term-left">
+        <span class="term-abbr">EV · Exposure Value</span>
+        <div class="term-name">Exposición</div>
+        <div class="term-oneliner">Cuánta luz entra al sensor. La decisión más fundamental de toda fotografía.</div>
+      </div>
+      <span class="term-icon">☀️</span>
+      <span class="expand-ico">+</span>
+    </div>
+    <div class="term-body"><div class="term-inner">
+      <p style="color:var(--muted);font-weight:300;line-height:1.75;margin-bottom:1.25rem;">La exposición determina si una foto queda <strong style="color:var(--cream);">oscura</strong> (subexpuesta), <strong style="color:var(--cream);">correcta</strong> o <strong style="color:var(--cream);">quemada</strong> (sobreexpuesta). En el iPhone la controlas tocando la pantalla y deslizando el ícono del sol.</p>
+      <div class="demo-box">
+        <div class="demo-title">Simulador de Exposición — arrastra</div>
+        <div class="exp-demo">
+          <div class="exp-scene" id="expScene"><div class="exp-sil"></div></div>
+          <div class="exp-slider-wrap">
+            <span class="exp-label">−3EV</span>
+            <input type="range" min="-3" max="3" step="0.1" value="0" id="expSlider" oninput="updateExp(this.value)">
+            <span class="exp-label" style="text-align:right">+3EV</span>
+            <span class="exp-val" id="expVal">0 EV</span>
+          </div>
+          <div class="exp-hint" id="expHint">Exposición neutra — punto de partida</div>
+        </div>
+      </div>
+      <div class="rule"><div class="rule-eye">En tu iPhone</div><p>Toca el sujeto en pantalla → aparece el sol amarillo → desliza arriba para más luz, abajo para menos. Mantén presionado para bloquear AE/AF.</p></div>
+      <div class="use-grid">
+        <div class="use-card"><div class="use-scenario">Cuándo subir</div><div class="use-title">Sujeto en sombra</div><div class="use-text">Si la persona está bajo sombra y el fondo es brillante, sube exposición para iluminar el rostro.</div></div>
+        <div class="use-card"><div class="use-scenario">Cuándo bajar</div><div class="use-title">Cielo o ventana quemados</div><div class="use-text">Baja la exposición para recuperar detalle en zonas brillantes. El fondo sube calidad visualmente.</div></div>
+        <div class="use-card"><div class="use-scenario">Cuándo dejar en auto</div><div class="use-title">Escenas planas, luz uniforme</div><div class="use-text">Cuando la luz es homogénea y no hay grandes contrastes, el auto del iPhone suele acertar.</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="term-block tc-cyan">
+    <div class="term-header" onclick="toggleTerm(this)">
+      <div class="term-left">
+        <span class="term-abbr">f/ · Número f</span>
+        <div class="term-name">Apertura</div>
+        <div class="term-oneliner">Qué tan abierta está la lente. Controla profundidad de campo y cantidad de luz.</div>
+      </div>
+      <span class="term-icon">🔭</span>
+      <span class="expand-ico">+</span>
+    </div>
+    <div class="term-body"><div class="term-inner">
+      <p style="color:var(--muted);font-weight:300;line-height:1.75;margin-bottom:1.25rem;">La apertura se mide con el número f/. <strong style="color:var(--cyan);">f/ bajo = apertura grande = más luz = fondo desenfocado.</strong> f/ alto = apertura pequeña = menos luz = todo en foco. En el iPhone la apertura es fija por lente, pero el modo Retrato simula el efecto de apertura amplia con software.</p>
+      <div class="demo-box">
+        <div class="demo-title">Apertura y profundidad de campo</div>
+        <div class="aperture-demo">
+          <div class="aperture-visual" id="apVisual">
+            <div class="aperture-circle">
+              <div class="aperture-ring" id="ring1"><div class="aperture-hole" style="width:60px;height:60px;"></div></div>
+              <div class="aperture-label" style="color:var(--cyan);">f/1.8</div>
+              <div class="aperture-sub">Muy abierta</div>
+            </div>
+            <span class="aperture-arrow">→</span>
+            <div class="aperture-circle">
+              <div class="aperture-ring" id="ring2"><div class="aperture-hole" style="width:36px;height:36px;"></div></div>
+              <div class="aperture-label" style="color:var(--gold);">f/4</div>
+              <div class="aperture-sub">Media</div>
+            </div>
+            <span class="aperture-arrow">→</span>
+            <div class="aperture-circle">
+              <div class="aperture-ring" id="ring3"><div class="aperture-hole" style="width:12px;height:12px;"></div></div>
+              <div class="aperture-label" style="color:var(--muted);">f/11</div>
+              <div class="aperture-sub">Muy cerrada</div>
+            </div>
+          </div>
+          <div class="ap-slider-wrap">
+            <span class="ap-label">f/1.4 — más luz, menos profundidad</span>
+          </div>
+        </div>
+      </div>
+      <div class="rule"><div class="rule-eye">En tu iPhone 17</div><p>El lente principal tiene apertura fija de aprox. <strong>f/1.78</strong>. El ultra angular f/2.2. El teleobjetivo f/2.8. No puedes cambiarla manualmente, pero el modo Retrato usa IA para simular f/1.4–f/16.</p></div>
+      <div class="use-grid">
+        <div class="use-card"><div class="use-scenario">f/ bajo (f/1.4–2.8)</div><div class="use-title">Retratos, poca luz</div><div class="use-text">Fondo desenfocado, sujeto aislado, más luz al sensor. Ideal para retratos y baja iluminación.</div></div>
+        <div class="use-card"><div class="use-scenario">f/ alto (f/8–f/16)</div><div class="use-title">Paisajes, arquitectura</div><div class="use-text">Todo en foco de adelante atrás. Perfecto para escenas donde el espacio completo importa.</div></div>
+        <div class="use-card"><div class="use-scenario">Modo Retrato iPhone</div><div class="use-title">Simula apertura amplia</div><div class="use-text">Activa Modo Retrato y ajusta el número f/ en pantalla. El iPhone usa IA para desenfocar el fondo.</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="term-block tc-orange">
+    <div class="term-header" onclick="toggleTerm(this)">
+      <div class="term-left">
+        <span class="term-abbr">ISO · Sensibilidad</span>
+        <div class="term-name">ISO</div>
+        <div class="term-oneliner">Qué tan sensible está el sensor a la luz. A más ISO, más luz... pero también más ruido.</div>
+      </div>
+      <span class="term-icon">📡</span>
+      <span class="expand-ico">+</span>
+    </div>
+    <div class="term-body"><div class="term-inner">
+      <p style="color:var(--muted);font-weight:300;line-height:1.75;margin-bottom:1.25rem;">El ISO es como el volumen de un micrófono. Si subes mucho el volumen para captar un sonido débil, también amplias el ruido de fondo. ISO bajo = imagen limpia. ISO alto = imagen con grano/ruido digital.</p>
+      <div class="demo-box">
+        <div class="demo-title">Escala ISO y calidad de imagen</div>
+        <div class="iso-strip" id="isoStrip">
+          <div class="iso-seg" style="background:#0a0a0a;"><span style="color:#888">ISO<br>32</span></div>
+          <div class="iso-seg" style="background:#0c0c0c;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%224%22 height=%224%22><rect width=%224%22 height=%224%22 fill=%22%230c0c0c%22/><circle cx=%221%22 cy=%221%22 r=%22.3%22 fill=%22%23111%22/></svg>');"><span style="color:#777">ISO<br>100</span></div>
+          <div class="iso-seg" style="background:#111;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%224%22 height=%224%22><rect width=%224%22 height=%224%22 fill=%22%23111%22/><circle cx=%222%22 cy=%222%22 r=%22.5%22 fill=%22%23161616%22/></svg>');"><span style="color:#aaa">ISO<br>400</span></div>
+          <div class="iso-seg" style="background:#141418;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%223%22 height=%223%22><rect width=%223%22 height=%223%22 fill=%22%23141418%22/><circle cx=%221%22 cy=%221%22 r=%22.6%22 fill=%22%231e1e22%22/><circle cx=%222%22 cy=%222%22 r=%22.4%22 fill=%22%23191920%22/></svg>');"><span style="color:var(--gold)">ISO<br>800</span></div>
+          <div class="iso-seg" style="background:#18181e;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%223%22 height=%223%22><rect width=%223%22 height=%223%22 fill=%22%2318181e%22/><circle cx=%221%22 cy=%222%22 r=%22.8%22 fill=%22%23252530%22/><circle cx=%222%22 cy=%221%22 r=%22.5%22 fill=%22%23202028%22/></svg>');"><span style="color:var(--orange)">ISO<br>1600</span></div>
+          <div class="iso-seg" style="background:#1a1a28;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%222%22 height=%222%22><rect width=%222%22 height=%222%22 fill=%22%231a1a28%22/><circle cx=%221%22 cy=%221%22 r=%22.7%22 fill=%22%23282838%22/></svg>');"><span style="color:var(--red)">ISO<br>3200+</span></div>
+        </div>
+        <p style="font-size:.75rem;color:var(--muted);margin-top:.5rem;font-style:italic;">De izquierda a derecha: imagen más limpia → más ruido visible</p>
+      </div>
+      <div class="rule"><div class="rule-eye">En tu iPhone 17</div><p>El iPhone gestiona el ISO automáticamente. Para controlarlo manualmente usa apps como <strong>Halide, ProCamera</strong> o el modo ProRes/ProRAW donde el control manual está disponible. El iPhone 17 rinde muy bien hasta ISO 1600 gracias al sensor de 2a generación.</p></div>
+      <div class="use-grid">
+        <div class="use-card"><div class="use-scenario">ISO 32–100</div><div class="use-title">Luz de día</div><div class="use-text">Siempre que puedas, mantén el ISO al mínimo. Imagen más limpia y más rango dinámico.</div></div>
+        <div class="use-card"><div class="use-scenario">ISO 400–800</div><div class="use-title">Interior con ventanas</div><div class="use-text">El iPhone sube automáticamente cuando la luz baja. Resultado sigue siendo muy usable.</div></div>
+        <div class="use-card"><div class="use-scenario">ISO 1600+</div><div class="use-title">Noche o baja luz extrema</div><div class="use-text">Usa Night Mode para que el iPhone gestione la exposición larga en lugar de solo subir ISO. Mejor resultado.</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="term-block tc-purple">
+    <div class="term-header" onclick="toggleTerm(this)">
+      <div class="term-left">
+        <span class="term-abbr">MP · PX · 4K · 8K</span>
+        <div class="term-name">Resolución</div>
+        <div class="term-oneliner">Cuántos píxeles tiene la imagen. Más no siempre es mejor si la luz es mala.</div>
+      </div>
+      <span class="term-icon">🔲</span>
+      <span class="expand-ico">+</span>
+    </div>
+    <div class="term-body"><div class="term-inner">
+      <p style="color:var(--muted);font-weight:300;line-height:1.75;margin-bottom:1.25rem;">Resolución es la cantidad de píxeles que componen una imagen. Se mide en megapíxeles (MP) para fotos y en líneas horizontales (HD, 4K, 8K) para video. Alta resolución permite imprimir grande o recortar sin perder calidad — pero no mejora la composición ni la luz.</p>
+      <table class="res-table">
+        <thead>
+          <tr>
+            <th>Resolución</th>
+            <th>Píxeles totales</th>
+            <th>Impresión máxima</th>
+            <th>Uso ideal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="res-badge" style="color:var(--muted);border-color:var(--border);">12 MP</span></td>
+            <td>4032 × 3024</td>
+            <td>~40 × 30 cm</td>
+            <td>Redes sociales, WhatsApp, uso cotidiano</td>
+          </tr>
+          <tr>
+            <td><span class="res-badge" style="color:var(--gold);border-color:rgba(201,168,76,.4);">48 MP</span></td>
+            <td>8064 × 6048</td>
+            <td>~80 × 60 cm</td>
+            <td>Impresión, recortes, portadas, trabajo profesional</td>
+          </tr>
+          <tr>
+            <td><span class="res-badge" style="color:var(--cyan);border-color:rgba(79,200,212,.4);">4K video</span></td>
+            <td>3840 × 2160</td>
+            <td>—</td>
+            <td>Video profesional, contenido para pantallas grandes</td>
+          </tr>
+          <tr>
+            <td><span class="res-badge" style="color:var(--purple);border-color:rgba(139,106,205,.4);">ProRes 4K</span></td>
+            <td>3840 × 2160</td>
+            <td>—</td>
+            <td>Producción cinematográfica, post-producción seria</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="rule"><div class="rule-eye">Consejo práctico</div><p>Para la mayoría de usos en redes sociales, <strong>12 MP es más que suficiente</strong> y genera archivos más ligeros. Usa 48 MP cuando vayas a imprimir grande o necesites recortar sin perder calidad.</p></div>
+    </div></div>
+  </div>
+
+  <div class="term-block tc-green">
+    <div class="term-header" onclick="toggleTerm(this)">
+      <div class="term-left">
+        <span class="term-abbr">HDR · SDR · Dolby Vision</span>
+        <div class="term-name">HDR y SDR</div>
+        <div class="term-oneliner">El rango de luminosidad que puede mostrar una pantalla o contener una imagen.</div>
+      </div>
+      <span class="term-icon">🌅</span>
+      <span class="expand-ico">+</span>
+    </div>
+    <div class="term-body"><div class="term-inner">
+      <p style="color:var(--muted);font-weight:300;line-height:1.75;margin-bottom:1.25rem;"><strong style="color:var(--cream);">SDR (Standard Dynamic Range)</strong> es el rango de brillo tradicional — la mayoría de pantallas puede mostrarlo. <strong style="color:var(--cream);">HDR (High Dynamic Range)</strong> muestra tanto las sombras más oscuras como las luces más brillantes simultáneamente, con mayor detalle y viveza. El iPhone 17 filma en Dolby Vision HDR de forma nativa.</p>
+
+      <div class="toggle-compare">
+        <div class="tc-btns">
+          <button class="tc-btn active" onclick="switchPanel('sdr',this)">SDR — Estándar</button>
+          <button class="tc-btn" onclick="switchPanel('hdr',this)">HDR — Alto rango</button>
+          <button class="tc-btn" onclick="switchPanel('dolby',this)">Dolby Vision</button>
+        </div>
+        <div class="tc-panel active" id="panel-sdr">
+          <div style="display:flex;gap:2rem;align-items:flex-start;flex-wrap:wrap;">
+            <div>
+              <div style="width:200px;height:120px;background:linear-gradient(135deg,#1a1a1a 0%,#888 50%,#fff 100%);border:1px solid var(--border);margin-bottom:1rem;"></div>
+            </div>
+            <div>
+              <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:.6rem;">SDR — Standard Dynamic Range</div>
+              <p style="font-size:.875rem;color:var(--muted);line-height:1.65;margin-bottom:.75rem;">Rango de brillo de 0 a 100 nits. Compatible con todas las pantallas. Las luces muy brillantes se ven "quemadas" y las sombras muy oscuras se pierden.</p>
+              <div class="pill-row">
+                <span class="pill yes">Máxima compatibilidad</span>
+                <span class="pill yes">Archivo más ligero</span>
+                <span class="pill no">Pierde detalle en extremos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tc-panel" id="panel-hdr">
+          <div style="display:flex;gap:2rem;align-items:flex-start;flex-wrap:wrap;">
+            <div>
+              <div style="width:200px;height:120px;background:linear-gradient(135deg,#050510 0%,#555 40%,#eef 80%,#fff 100%);box-shadow:0 0 20px rgba(255,255,220,.15);border:1px solid var(--border);margin-bottom:1rem;"></div>
+            </div>
+            <div>
+              <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:.6rem;">HDR — High Dynamic Range</div>
+              <p style="font-size:.875rem;color:var(--muted);line-height:1.65;margin-bottom:.75rem;">Rango de hasta 1000–4000 nits. Mucho más detalle en luces y sombras. Necesita pantalla HDR para verse correctamente. Si se ve en SDR puede lucir "lavado".</p>
+              <div class="pill-row">
+                <span class="pill yes">Más detalle en extremos</span>
+                <span class="pill yes">Colores más ricos</span>
+                <span class="pill maybe">Requiere pantalla HDR</span>
+                <span class="pill no">Archivo más pesado</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tc-panel" id="panel-dolby">
+          <div style="display:flex;gap:2rem;align-items:flex-start;flex-wrap:wrap;">
+            <div>
+              <div style="width:200px;height:120px;background:linear-gradient(135deg,#020208 0%,#334 30%,#88a 60%,#ccf 85%,#fff 100%);box-shadow:0 0 30px rgba(180,180,255,.2);border:1px solid rgba(139,106,205,.3);margin-bottom:1rem;"></div>
+            </div>
+            <div>
+              <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:.6rem;">Dolby Vision</div>
+              <p style="font-size:.875rem;color:var(--muted);line-height:1.65;margin-bottom:.75rem;">El estándar de mayor calidad. Hasta 12,000 nits. El iPhone 17 graba video en Dolby Vision HDR automáticamente. Si tu plataforma de destino lo soporta (YouTube, Apple TV+, Netflix), es la mejor opción.</p>
+              <div class="pill-row">
+                <span class="pill yes">Máxima calidad visual</span>
+                <span class="pill yes">Graba automáticamente iPhone 17</span>
+                <span class="pill maybe">Requiere pantalla Dolby Vision</span>
+                <span class="pill no">Edición más exigente</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rule"><div class="rule-eye">¿Cuándo desactivar HDR?</div><p>Si vas a publicar en plataformas que no soportan HDR bien (algunas webs, presentaciones corporativas antiguas), desactiva HDR en Ajustes → Cámara → Apple ProRes / HDR. El resultado será más predecible.</p></div>
+    </div></div>
+  </div>
+
+  <div class="term-block tc-blue">
+    <div class="term-header" onclick="toggleTerm(this)">
+      <div class="term-left">
+        <span class="term-abbr">Log · Flat · LUT</span>
+        <div class="term-name">Perfil Log</div>
+        <div class="term-oneliner">Un formato de grabación que preserva el máximo de información para la edición posterior.</div>
+      </div>
+      <span class="term-icon">📉</span>
+      <span class="expand-ico">+</span>
+    </div>
+    <div class="term-body"><div class="term-inner">
+      <p style="color:var(--muted);font-weight:300;line-height:1.75;margin-bottom:1.25rem;"><strong style="color:var(--cream);">Log</strong> (logarítmico) es un perfil de imagen que comprime el rango dinámico en un espacio "plano" y desaturado. Parece feo al grabarlo, pero contiene mucha más información para recuperar en edición. El iPhone 17 ofrece el perfil <strong style="color:var(--blue);">Apple Log</strong> en modo ProRes.</p>
+
+      <div class="demo-box">
+        <div class="demo-title">Curva Log vs Estándar</div>
+        <div class="curve-wrap">
+          <svg class="tri-svg" viewBox="0 0 400 180">
+            <!-- Grid -->
+            <line x1="50" y1="20" x2="50" y2="160" stroke="#272727" stroke-width="1"/>
+            <line x1="50" y1="160" x2="380" y2="160" stroke="#272727" stroke-width="1"/>
+            <line x1="50" y1="20" x2="380" y2="20" stroke="#1e1e1e" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="50" y1="90" x2="380" y2="90" stroke="#1e1e1e" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="215" y1="20" x2="215" y2="160" stroke="#1e1e1e" stroke-width="1" stroke-dasharray="4,4"/>
+            <!-- Standard linear curve -->
+            <line x1="50" y1="160" x2="380" y2="20" stroke="#c9a84c" stroke-width="2" opacity=".7"/>
+            <!-- Log curve -->
+            <path d="M 50 160 Q 100 140 150 115 Q 220 85 300 50 Q 345 35 380 25" stroke="#4fc8d4" stroke-width="2.5" fill="none"/>
+            <!-- Labels -->
+            <text x="55" y="175" fill="#555" font-family="monospace" font-size="10">Sombras</text>
+            <text x="340" y="175" fill="#555" font-family="monospace" font-size="10">Luces</text>
+            <text x="54" y="18" fill="#555" font-family="monospace" font-size="9">Alto</text>
+            <text x="54" y="95" fill="#555" font-family="monospace" font-size="9">Medio</text>
+            <!-- Legend -->
+            <line x1="220" y1="145" x2="245" y2="145" stroke="#c9a84c" stroke-width="2"/>
+            <text x="248" y="148" fill="#c9a84c" font-family="monospace" font-size="9">Estándar</text>
+            <line x1="220" y1="158" x2="245" y2="158" stroke="#4fc8d4" stroke-width="2.5"/>
+            <text x="248" y="161" fill="#4fc8d4" font-family="monospace" font-size="9">Apple Log</text>
+          </svg>
+        </div>
+        <p style="font-size:.78rem;color:var(--muted);margin-top:.5rem;">El perfil Log comprime las altas luces y eleva las sombras — preserva más información en ambos extremos.</p>
+      </div>
+
+      <div class="rule"><div class="rule-eye">LUT — Look-Up Table</div><p>Una LUT es una "tabla de color" que transforma el Log plano en el look final deseado. Es como aplicar una receta de color. Puedes aplicar LUTs en apps como LumaFusion, DaVinci Resolve o Lightroom.</p></div>
+
+      <div class="use-grid">
+        <div class="use-card"><div class="use-scenario">Cuándo usar Apple Log</div><div class="use-title">Producción seria de video</div><div class="use-text">Si vas a editar el video en postproducción con un look cinematográfico, usa Log. Más flexibilidad de color.</div></div>
+        <div class="use-card"><div class="use-scenario">Cuándo NO usar Log</div><div class="use-title">Video directo a publicar</div><div class="use-text">Si el video va directo a redes sin editar, Log se verá feo y desaturado. Usa el perfil Estándar o HDR.</div></div>
+        <div class="use-card"><div class="use-scenario">ProRAW en fotos</div><div class="use-title">Similar a Log para imágenes fijas</div><div class="use-text">ProRAW es el equivalente fotográfico del Log: más margen de edición, más información, requiere postproceso.</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="term-block tc-gold">
+    <div class="term-header" onclick="toggleTerm(this)">
+      <div class="term-left">
+        <span class="term-abbr">WB · K · Kelvin</span>
+        <div class="term-name">Balance de Blancos</div>
+        <div class="term-oneliner">El "clima emocional" de la imagen. Corrige o crea la temperatura de color de la escena.</div>
+      </div>
+      <span class="term-icon">🕯️</span>
+      <span class="expand-ico">+</span>
+    </div>
+    <div class="term-body"><div class="term-inner">
+      <p style="color:var(--muted);font-weight:300;line-height:1.75;margin-bottom:1.25rem;">La temperatura de color se mide en grados Kelvin (K). Números bajos = colores cálidos (naranja, amarillo). Números altos = colores fríos (azul). El iPhone lo gestiona automáticamente, pero en edición puedes ajustarlo para cambiar la sensación de la imagen.</p>
+      <div class="demo-box">
+        <div class="demo-title">Escala de temperatura de color — pasa el cursor</div>
+        <div class="wb-strip">
+          <div class="wb-seg" style="background:#f5c060;"><span style="color:#333">2000K<br>Vela</span></div>
+          <div class="wb-seg" style="background:#f8c878;"><span style="color:#333">2700K<br>Tungst.</span></div>
+          <div class="wb-seg" style="background:#ffd890;"><span style="color:#333">3200K<br>Studio</span></div>
+          <div class="wb-seg" style="background:#fff3d0;"><span style="color:#444">4000K<br>Fluoresc.</span></div>
+          <div class="wb-seg" style="background:#fff9f0;"><span style="color:#555">5000K<br>Mediodía</span></div>
+          <div class="wb-seg" style="background:#f0f8ff;"><span style="color:#555">5500K<br>Luz día</span></div>
+          <div class="wb-seg" style="background:#d8eeff;"><span style="color:#555">6500K<br>Nublado</span></div>
+          <div class="wb-seg" style="background:#b8d8ff;"><span style="color:#444">7500K<br>Sombra</span></div>
+          <div class="wb-seg" style="background:#90b8f8;"><span>10000K<br>Cielo azul</span></div>
+        </div>
+      </div>
+      <div class="use-grid">
+        <div class="use-card"><div class="use-scenario">Más cálido (2000–3500K)</div><div class="use-title">Cercanía, nostalgia, vida</div><div class="use-text">Retratos, familia, gastronomía, marca personal cálida. Da sensación de hogar y confort.</div></div>
+        <div class="use-card"><div class="use-scenario">Neutro (5000–6000K)</div><div class="use-title">Producto, catálogo, editorial</div><div class="use-text">La luz se ve fiel a la realidad. Ideal cuando necesitas mostrar los colores reales de un producto.</div></div>
+        <div class="use-card"><div class="use-scenario">Más frío (7000K+)</div><div class="use-title">Elegancia, modernidad, tecnología</div><div class="use-text">Arquitectura, branding corporativo, fotografía de ciudad nocturna y escenas contemplativas.</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="term-block tc-red">
+    <div class="term-header" onclick="toggleTerm(this)">
+      <div class="term-left">
+        <span class="term-abbr">SS · 1/x seg</span>
+        <div class="term-name">Velocidad de Obturación</div>
+        <div class="term-oneliner">Cuánto tiempo está expuesto el sensor. Congela o mueve el mundo a tu voluntad.</div>
+      </div>
+      <span class="term-icon">⚡</span>
+      <span class="expand-ico">+</span>
+    </div>
+    <div class="term-body"><div class="term-inner">
+      <p style="color:var(--muted);font-weight:300;line-height:1.75;margin-bottom:1.25rem;">La velocidad de obturación es el tiempo que el sensor está recibiendo luz. <strong style="color:var(--cream);">Velocidad rápida</strong> (1/1000s) = congela el movimiento. <strong style="color:var(--cream);">Velocidad lenta</strong> (1/30s o menos) = desenfoca el movimiento de forma creativa o capta más luz en noche.</p>
+      <div class="demo-box">
+        <div class="demo-title">Efecto de velocidad de obturación</div>
+        <div class="ss-visual">
+          <div class="ss-card">
+            <div class="ss-motion"><div class="ss-dot frozen"></div></div>
+            <div class="ss-value">1/2000 s</div>
+            <div class="ss-name">Congelado</div>
+            <div class="ss-use">Deportes, aves, niños en movimiento</div>
+          </div>
+          <div class="ss-card">
+            <div class="ss-motion"><div class="ss-dot slight"></div></div>
+            <div class="ss-value">1/250 s</div>
+            <div class="ss-name">Ligeramente dinámico</div>
+            <div class="ss-use">Retratos con movimiento natural</div>
+          </div>
+          <div class="ss-card">
+            <div class="ss-motion"><div class="ss-dot blurry"></div></div>
+            <div class="ss-value">1/30 s o menos</div>
+            <div class="ss-name">Motion blur</div>
+            <div class="ss-use">Cascadas, tráfico, luz nocturna</div>
+          </div>
+        </div>
+      </div>
+      <div class="rule"><div class="rule-eye">En tu iPhone 17</div><p>Usa el modo manual (o apps como Halide) para controlar la obturación. En modo noche el iPhone automáticamente usa velocidades lentas de hasta 30 segundos. La estabilización óptica del iPhone 17 ayuda hasta 1/4 seg aprox.</p></div>
+    </div></div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════════
+  EXPOSICIÓN (módulo individual)
+════════════════════════════════════════════ -->
+<section class="section" id="tab-exposicion">
+  <div class="sec-eyebrow">Término clave · 01</div>
+  <h2 class="sec-title">Exposición</h2>
+  <p class="sec-desc">La exposición es la cantidad de luz que llega al sensor. Es la decisión más inmediata y más poderosa que toma un fotógrafo.</p>
+
+  <div class="quote"><p>Exponer bien no es hacer que todo quede brillante. Es que la luz cuente lo que quieres contar.</p></div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin:2.5rem 0 1rem;">Los tres componentes que controlan la exposición</h3>
+  <div class="use-grid" style="margin-bottom:2rem;">
+    <div class="use-card">
+      <div class="use-scenario" style="color:var(--gold);border-color:rgba(201,168,76,.4);">Apertura f/</div>
+      <div class="use-title">Tamaño del diafragma</div>
+      <div class="use-text">Controla cuánta luz entra por el objetivo. f/ bajo = más luz. También controla la profundidad de campo.</div>
+    </div>
+    <div class="use-card">
+      <div class="use-scenario" style="color:var(--cyan);border-color:rgba(79,200,212,.4);">Velocidad SS</div>
+      <div class="use-title">Tiempo de exposición</div>
+      <div class="use-text">Cuánto tiempo el sensor recibe luz. Velocidad rápida = menos luz, movimiento congelado. Lenta = más luz, movimiento borroso.</div>
+    </div>
+    <div class="use-card">
+      <div class="use-scenario" style="color:var(--orange);border-color:rgba(224,120,64,.4);">ISO</div>
+      <div class="use-title">Sensibilidad del sensor</div>
+      <div class="use-text">Amplificación de la señal de luz. ISO alto = más luz pero más ruido. ISO bajo = imagen limpia.</div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin:2.5rem 0 1rem;">Simulador de Exposición</h3>
+  <div class="demo-box">
+    <div class="demo-title">Arrastra para cambiar la exposición</div>
+    <div class="exp-demo">
+      <div class="exp-scene" id="expScene2">
+        <div class="exp-sil"></div>
+      </div>
+      <div class="exp-slider-wrap">
+        <span class="exp-label">−3EV</span>
+        <input type="range" min="-3" max="3" step="0.1" value="0" id="expSlider2" oninput="updateExp2(this.value)">
+        <span class="exp-label" style="text-align:right">+3EV</span>
+        <span class="exp-val" id="expVal2">0 EV</span>
+      </div>
+      <div class="exp-hint" id="expHint2">Exposición neutra — punto de partida</div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin:2.5rem 0 1rem;">Errores de Exposición más comunes</h3>
+  <div class="use-grid">
+    <div class="use-card"><div class="use-scenario" style="color:var(--red);border-color:rgba(224,88,88,.3);">Error 01</div><div class="use-title">Rostro oscuro, fondo brillante</div><div class="use-text">El iPhone expone para el promedio. Toca el rostro en pantalla para que ajuste para la persona.</div></div>
+    <div class="use-card"><div class="use-scenario" style="color:var(--red);border-color:rgba(224,88,88,.3);">Error 02</div><div class="use-title">Cielo completamente blanco</div><div class="use-text">El cielo se quema cuando expones para el sujeto oscuro. Baja la exposición y levanta sombras en edición.</div></div>
+    <div class="use-card"><div class="use-scenario" style="color:var(--red);border-color:rgba(224,88,88,.3);">Error 03</div><div class="use-title">Sobreexponer en playa o nieve</div><div class="use-text">Fondos muy blancos engañan al medidor. Baja −1EV y recuperas detalle en la arena o la nieve.</div></div>
+    <div class="use-card"><div class="use-scenario" style="color:var(--red);border-color:rgba(224,88,88,.3);">Error 04</div><div class="use-title">No bloquear AE/AF</div><div class="use-text">Si el iPhone recalcula la exposición al mover la cámara, la foto cambia. Mantén presionado para bloquear.</div></div>
+  </div>
+
+  <div class="exercise">
+    <h3>Exposición consciente — ejercicio de bracketing</h3>
+    <ul>
+      <li>Elige una escena con contraste: persona junto a ventana o bajo árbol.</li>
+      <li>Toma la foto dejando que el iPhone decida la exposición.</li>
+      <li>Toma otra tocando el rostro de la persona.</li>
+      <li>Toma otra tocando el fondo más brillante.</li>
+      <li>Compara las tres. Decide cuál exposición cuénta mejor la historia.</li>
+      <li>En ProRAW, toma solo una bien expuesta para el sujeto y recupera el fondo en edición.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+  APERTURA
+════════════════════════════════════════════ -->
+<section class="section" id="tab-apertura">
+  <div class="sec-eyebrow">Término clave · 02</div>
+  <h2 class="sec-title">Apertura f/<br>y Profundidad<br>de Campo</h2>
+  <p class="sec-desc">La apertura controla cuánta luz entra al sensor y cuánto del espacio delante y detrás del sujeto aparece enfocado.</p>
+
+  <div class="rule"><div class="rule-eye">Regla de oro</div><p><strong>f/ bajo (1.4, 1.8, 2.8)</strong> = apertura grande = mucha luz = poco en foco (fondo desenfocado).<br><strong>f/ alto (8, 11, 16)</strong> = apertura pequeña = poca luz = mucho en foco (todo nítido).</p></div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin:2.5rem 0 1rem;">Profundidad de campo en el iPhone 17</h3>
+  <div class="fl-demo">
+    <div class="fl-card">
+      <div class="fl-visual">
+        <div style="width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(79,200,212,.3),transparent);border:1px solid var(--cyan);position:absolute;bottom:10px;"></div>
+        <div style="width:100px;height:8px;background:rgba(79,200,212,.08);border-radius:4px;position:absolute;bottom:8px;"></div>
+      </div>
+      <div class="fl-val" style="color:var(--cyan);">f/1.78</div>
+      <div class="fl-name">Lente principal iPhone 17</div>
+      <ul class="fl-list">
+        <li>Fondo muy desenfocado</li>
+        <li>Ideal para retratos</li>
+        <li>Máxima entrada de luz</li>
+      </ul>
+    </div>
+    <div class="fl-card">
+      <div class="fl-visual">
+        <div style="width:50px;height:50px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.3),transparent);border:1px solid var(--gold);position:absolute;bottom:10px;"></div>
+        <div style="width:100px;height:8px;background:rgba(201,168,76,.08);border-radius:4px;position:absolute;bottom:8px;"></div>
+      </div>
+      <div class="fl-val" style="color:var(--gold);">f/2.2</div>
+      <div class="fl-name">Ultra angular iPhone 17</div>
+      <ul class="fl-list">
+        <li>Profundidad media-alta</li>
+        <li>Espacios y arquitectura</li>
+        <li>Casi todo en foco</li>
+      </ul>
+    </div>
+    <div class="fl-card">
+      <div class="fl-visual">
+        <div style="width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,rgba(139,106,205,.3),transparent);border:1px solid var(--purple);position:absolute;bottom:10px;"></div>
+        <div style="width:100px;height:8px;background:rgba(139,106,205,.08);border-radius:4px;position:absolute;bottom:8px;"></div>
+      </div>
+      <div class="fl-val" style="color:var(--purple);">f/2.8</div>
+      <div class="fl-name">Teleobjetivo 5x iPhone 17</div>
+      <ul class="fl-list">
+        <li>Desenfoque natural más suave</li>
+        <li>Retrato elegante sin Modo Retrato</li>
+        <li>Compresión de perspectiva</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="use-grid">
+    <div class="use-card"><div class="use-scenario">Modo Retrato f/1.4</div><div class="use-title">Máximo bokeh</div><div class="use-text">Fondo muy desenfocado. Úsalo solo si el sujeto está bien separado y la silueta es clara.</div></div>
+    <div class="use-card"><div class="use-scenario">Modo Retrato f/4–f/6</div><div class="use-title">Desenfoque natural</div><div class="use-text">El rango más versátil y elegante. El sujeto destaca sin que el desenfoque se vea artificial.</div></div>
+    <div class="use-card"><div class="use-scenario">Sin Modo Retrato</div><div class="use-title">Paisaje y arquitectura</div><div class="use-text">El iPhone a 0.5x o 1x sin modo retrato tiene mucha profundidad de campo natural. Perfecto para escenas.</div></div>
+    <div class="use-card"><div class="use-scenario">Modo Retrato f/11–f/16</div><div class="use-title">Simula gran angular</div><div class="use-text">Útil cuando quieres el encuadre del retrato pero con mucho fondo en foco. Poco usual, pero existe.</div></div>
+  </div>
+
+  <div class="exercise">
+    <h3>Explorar la profundidad de campo</h3>
+    <ul>
+      <li>Activa Modo Retrato con una persona o objeto.</li>
+      <li>Ajusta el f/ en la rueda de la parte inferior: de f/1.4 hasta f/16.</li>
+      <li>Toma la misma foto en f/1.4, f/4.5 y f/11.</li>
+      <li>Compara: ¿en cuál se ve más natural el desenfoque?</li>
+      <li>Ahora toma la misma foto sin Modo Retrato a 2x. ¿Cuál prefieres?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+  ISO
+════════════════════════════════════════════ -->
+<section class="section" id="tab-iso">
+  <div class="sec-eyebrow">Término clave · 03</div>
+  <h2 class="sec-title">ISO — La<br>Sensibilidad<br>del Sensor</h2>
+  <p class="sec-desc">El ISO amplifica la señal de luz del sensor. Es la diferencia entre una foto limpia y una con grano digital. El iPhone 17 gestiona esto mejor que nunca, pero entenderlo te da control.</p>
+
+  <div class="rule"><div class="rule-eye">Analogía simple</div><p>El ISO es como el volumen de un amplificador. Si subes el volumen para escuchar mejor un sonido débil, también amplificas el ruido de fondo. Lo mismo pasa con el sensor.</p></div>
+
+  <div class="use-grid">
+    <div class="use-card"><div class="use-scenario" style="color:var(--green);border-color:rgba(94,200,122,.3);">ISO 32–100</div><div class="use-title">Luz directa de sol</div><div class="use-text">La situación ideal. Imagen limpia, máximo detalle, máximo rango dinámico. Siempre prioriza esto.</div></div>
+    <div class="use-card"><div class="use-scenario" style="color:var(--gold);border-color:rgba(201,168,76,.3);">ISO 200–400</div><div class="use-title">Exterior en sombra / nublado</div><div class="use-text">Todavía limpio en el iPhone 17. No verás diferencia significativa versus ISO 100 en uso normal.</div></div>
+    <div class="use-card"><div class="use-scenario" style="color:var(--gold);border-color:rgba(201,168,76,.3);">ISO 400–800</div><div class="use-title">Interior con ventanas</div><div class="use-text">Usable con confianza. El iPhone 17 maneja bien hasta aquí sin que el ruido sea molesto.</div></div>
+    <div class="use-card"><div class="use-scenario" style="color:var(--orange);border-color:rgba(224,120,64,.3);">ISO 1600–3200</div><div class="use-title">Interior oscuro / tarde-noche</div><div class="use-text">El ruido empieza a notarse. Usa Night Mode para que el iPhone prefiera velocidad lenta antes que ISO alto.</div></div>
+    <div class="use-card"><div class="use-scenario" style="color:var(--red);border-color:rgba(224,88,88,.3);">ISO 3200+</div><div class="use-title">Noche sin apoyo de luz</div><div class="use-text">Ruido visible. Busca siempre una fuente de luz, apoya el iPhone en una superficie o usa Night Mode.</div></div>
+  </div>
+
+  <div class="exercise">
+    <h3>Comparativa de ISO en distintas condiciones</h3>
+    <ul>
+      <li>Toma la misma foto en exteriores con sol (ISO bajo automático).</li>
+      <li>Muévete a interior sin ventanas (ISO medio).</li>
+      <li>Apaga luces y usa solo una vela o lámpara pequeña (ISO alto).</li>
+      <li>Compara el grano y detalle en las tres fotos ampliadas al 100%.</li>
+      <li>En la foto de baja luz, prueba Night Mode y compara con y sin él.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+  RESOLUCIÓN
+════════════════════════════════════════════ -->
+<section class="section" id="tab-resolucion">
+  <div class="sec-eyebrow">Término clave · 04</div>
+  <h2 class="sec-title">Resolución,<br>Megapíxeles<br>y Formatos</h2>
+  <p class="sec-desc">La resolución define cuánta información tiene una imagen. Más megapíxeles permiten imprimir más grande o recortar más — pero no mejoran la luz ni la composición.</p>
+
+  <div class="rule"><div class="rule-eye">Verdad fundamental</div><p>Una foto de 48 MP con mala luz sigue siendo una mala foto. Una foto de 12 MP bien iluminada y bien compuesta es una foto profesional.</p></div>
+
+  <table class="res-table">
+    <thead>
+      <tr>
+        <th>Resolución / Formato</th>
+        <th>Píxeles</th>
+        <th>Tamaño archivo</th>
+        <th>Cuándo usar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="res-badge" style="color:var(--muted);border-color:var(--border);">12 MP HEIF</span></td>
+        <td>4032 × 3024</td>
+        <td>~3–5 MB</td>
+        <td>Uso cotidiano, redes, WhatsApp, fotos para recordar</td>
+      </tr>
+      <tr>
+        <td><span class="res-badge" style="color:var(--gold);border-color:rgba(201,168,76,.4);">48 MP HEIF</span></td>
+        <td>8064 × 6048</td>
+        <td>~8–15 MB</td>
+        <td>Cuando vas a imprimir grande (poster, lienzo) o recortar en post</td>
+      </tr>
+      <tr>
+        <td><span class="res-badge" style="color:var(--cyan);border-color:rgba(79,200,212,.4);">48 MP ProRAW</span></td>
+        <td>8064 × 6048</td>
+        <td>~40–75 MB</td>
+        <td>Trabajo profesional: alta edición, producto, clientes exigentes</td>
+      </tr>
+      <tr>
+        <td><span class="res-badge" style="color:var(--purple);border-color:rgba(139,106,205,.4);">ProRes 4K 60fps</span></td>
+        <td>3840 × 2160</td>
+        <td>~6 GB/min</td>
+        <td>Video cinematográfico para producción y post-producción profesional</td>
+      </tr>
+      <tr>
+        <td><span class="res-badge" style="color:var(--orange);border-color:rgba(224,120,64,.4);">1080p H.265</span></td>
+        <td>1920 × 1080</td>
+        <td>~200 MB/min</td>
+        <td>Video para redes sociales y entrega directa sin edición pesada</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin:2.5rem 0 1rem;">¿Qué resolución elegir?</h3>
+  <div class="use-grid">
+    <div class="use-card"><div class="use-scenario">Instagram / TikTok / Stories</div><div class="use-title">12 MP es suficiente</div><div class="use-text">Las plataformas comprimen las imágenes de todas formas. No tiene sentido subir 48 MP si el resultado final es igual.</div></div>
+    <div class="use-card"><div class="use-scenario">Impresión A3 o mayor</div><div class="use-title">Usa 48 MP</div><div class="use-text">Para imprimir grande (poster, lienzo, impresión de lujo) necesitas la mayor resolución disponible.</div></div>
+    <div class="use-card"><div class="use-scenario">Recorte de composición</div><div class="use-title">Usa 48 MP</div><div class="use-text">Si sabes que vas a recortar la foto en edición para reencuadrar, empieza con la máxima resolución.</div></div>
+    <div class="use-card"><div class="use-scenario">Almacenamiento limitado</div><div class="use-title">HEIF 12 MP</div><div class="use-text">El formato HEIF es 2x más eficiente que JPEG manteniendo la misma calidad visual.</div></div>
+  </div>
+
+  <div class="exercise">
+    <h3>Entender el tamaño real de una imagen</h3>
+    <ul>
+      <li>Toma una foto en 12 MP y otra en 48 MP del mismo sujeto.</li>
+      <li>Revisa el tamaño de archivo en ambas en Fotos → info.</li>
+      <li>Amplía al 100% en pantalla. ¿Notas diferencia en detalle?</li>
+      <li>Envía la de 12 MP por WhatsApp. ¿Cuánto la comprime WhatsApp?</li>
+      <li>Reflexiona: ¿cuándo vale la pena el archivo más pesado?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+  HDR / SDR
+════════════════════════════════════════════ -->
+<section class="section" id="tab-hdr-sdr">
+  <div class="sec-eyebrow">Término clave · 05</div>
+  <h2 class="sec-title">HDR, SDR<br>y Dolby Vision</h2>
+  <p class="sec-desc">El rango dinámico define cuánto detalle puede capturar y mostrar una imagen entre las zonas más oscuras y las más brillantes. El iPhone 17 captura HDR en todo momento.</p>
+
+  <div class="hdr-compare">
+    <div class="hdr-pane">
+      <div class="hdr-visual">
+        <div class="hdr-half" style="background:#1a1a1a;">
+          <span style="font-size:.7rem;color:#555;font-family:monospace;">Sombra<br>sin detalle</span>
+        </div>
+        <div class="hdr-half" style="background:#ffffff;">
+          <span style="font-size:.7rem;color:#ccc;font-family:monospace;">Luz<br>quemada</span>
+        </div>
+      </div>
+      <span class="hdr-label-tag" style="color:var(--muted);border-color:var(--border);">SDR</span>
+      <div class="hdr-title">Standard Dynamic Range</div>
+      <div class="hdr-desc">
+        <span class="check">✓</span> Compatible con todas las pantallas<br>
+        <span class="check">✓</span> Archivo ligero, fácil de compartir<br>
+        <span class="cross">✗</span> Pierde detalle en zonas extremas<br>
+        <span class="cross">✗</span> Rango: 0 a ~100 nits
+      </div>
+    </div>
+    <div class="hdr-pane">
+      <div class="hdr-visual">
+        <div class="hdr-half" style="background:linear-gradient(to right,#050510,#1a1a3a);">
+          <span style="font-size:.7rem;color:#4a4a7a;font-family:monospace;">Sombra<br>con detalle</span>
+        </div>
+        <div class="hdr-half" style="background:linear-gradient(to right,#e8f0ff,#ffffff);box-shadow:inset -20px 0 30px rgba(200,230,255,.4);">
+          <span style="font-size:.7rem;color:#99aabb;font-family:monospace;">Luz<br>detallada</span>
+        </div>
+      </div>
+      <span class="hdr-label-tag" style="color:var(--green);border-color:rgba(94,200,122,.4);">HDR</span>
+      <div class="hdr-title">High Dynamic Range</div>
+      <div class="hdr-desc">
+        <span class="check">✓</span> Detalle en luces Y sombras<br>
+        <span class="check">✓</span> Colores más ricos y profundos<br>
+        <span class="cross">✗</span> Requiere pantalla HDR para verse bien<br>
+        <span class="cross">✗</span> Rango: hasta 1000–10000 nits
+      </div>
+    </div>
+  </div>
+
+  <div class="use-grid" style="margin-top:2rem;">
+    <div class="use-card"><div class="use-scenario" style="color:var(--green);border-color:rgba(94,200,122,.3);">Activa HDR cuando...</div><div class="use-title">Escenas de alto contraste</div><div class="use-text">Persona en contraluz, atardecer con sujeto, interior con ventana brillante. HDR preserva detalle en ambos extremos.</div></div>
+    <div class="use-card"><div class="use-scenario" style="color:var(--orange);border-color:rgba(224,120,64,.3);">Desactiva HDR cuando...</div><div class="use-title">Entrega directa sin pantalla HDR</div><div class="use-text">Si vas a proyectar en TV antigua, enviar a imprimir en lab estándar, o el cliente trabaja en SDR — desactiva para resultado predecible.</div></div>
+    <div class="use-card"><div class="use-scenario" style="color:var(--cyan);border-color:rgba(79,200,212,.3);">Dolby Vision automático</div><div class="use-title">Video iPhone 17</div><div class="use-text">El iPhone 17 graba video en Dolby Vision HDR automáticamente. Para YouTube, Instagram Reels y Apple TV es perfecto.</div></div>
+  </div>
+
+  <div class="exercise">
+    <h3>Comparar SDR vs HDR en pantalla</h3>
+    <ul>
+      <li>Encuentra una escena con alto contraste: ventana brillante y zona oscura.</li>
+      <li>Activa Smart HDR y toma la foto.</li>
+      <li>Desactiva Smart HDR (Ajustes → Cámara → Smart HDR) y toma la misma foto.</li>
+      <li>Compara en pantalla del iPhone (que soporta HDR): ¿cuánto más detalle ves en sombras y luces?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+  LOG / RAW
+════════════════════════════════════════════ -->
+<section class="section" id="tab-log">
+  <div class="sec-eyebrow">Término clave · 06</div>
+  <h2 class="sec-title">Log, RAW<br>y Formatos<br>Profesionales</h2>
+  <p class="sec-desc">Log y RAW son los formatos de mayor calidad. Capturan más información de la escena, pero requieren postproceso. Son para cuando la calidad final lo vale.</p>
+
+  <div class="hdr-compare" style="margin-bottom:2rem;">
+    <div class="hdr-pane">
+      <div class="hdr-visual" style="background:linear-gradient(135deg,#1a1a1a,#888 50%,#fff);">
+        <div class="hdr-half" style="background:linear-gradient(to right,#1a1a1a,#555);">
+          <span style="font-size:.7rem;color:#666;font-family:monospace;">Listo<br>para ver</span>
+        </div>
+        <div class="hdr-half" style="background:linear-gradient(to left,#fff,#aaa);">
+          <span style="font-size:.7rem;color:#888;font-family:monospace;">Baked<br>in-camera</span>
+        </div>
+      </div>
+      <span class="hdr-label-tag" style="color:var(--warm, #d4956a);border-color:rgba(212,149,106,.4);">JPEG / HEIF</span>
+      <div class="hdr-title">Formato Cocinado</div>
+      <div class="hdr-desc">
+        La cámara procesa la imagen: aplica color, nitidez, contraste y comprime. Listo para compartir, menor margen de edición.
+      </div>
+    </div>
+    <div class="hdr-pane">
+      <div class="hdr-visual" style="background:#0a0a14;">
+        <div class="hdr-half" style="background:#0a0a14;align-items:center;">
+          <span style="font-size:.7rem;color:#3a3a5a;font-family:monospace;text-align:center;">Datos<br>crudos<br>del sensor</span>
+        </div>
+        <div class="hdr-half" style="background:#0a0a14;">
+          <span style="font-size:.7rem;color:#3a3a5a;font-family:monospace;text-align:center;">Sin<br>procesar<br>aún</span>
+        </div>
+      </div>
+      <span class="hdr-label-tag" style="color:var(--cyan);border-color:rgba(79,200,212,.4);">ProRAW</span>
+      <div class="hdr-title">Datos Crudos del Sensor</div>
+      <div class="hdr-desc">
+        Contiene toda la información capturada antes de cualquier proceso. Parece "plano" hasta que lo editas. Máximo control creativo.
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin:2rem 0 1rem;">Apple Log para Video</h3>
+  <div class="demo-box">
+    <div class="demo-title">Cómo se ve Apple Log vs Estándar</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);">
+      <div style="background:var(--deep);padding:1.5rem;text-align:center;">
+        <div style="width:100%;height:80px;background:linear-gradient(135deg,#1a1a2e,#3a3a6e,#6a6aae,#d0d0e8);border:1px solid var(--border);margin-bottom:.75rem;border-radius:2px;"></div>
+        <div style="font-family:'Space Mono',monospace;font-size:.62rem;color:var(--green);">Estándar / HDR</div>
+        <div style="font-size:.8rem;color:var(--muted);margin-top:.4rem;">Colores procesados, listo para ver</div>
+      </div>
+      <div style="background:var(--deep);padding:1.5rem;text-align:center;">
+        <div style="width:100%;height:80px;background:linear-gradient(135deg,#2a2a35,#4a4a55,#6a6a78,#9090a0);border:1px solid var(--border);margin-bottom:.75rem;border-radius:2px;filter:saturate(0.3) brightness(1.1);"></div>
+        <div style="font-family:'Space Mono',monospace;font-size:.62rem;color:var(--cyan);">Apple Log</div>
+        <div style="font-size:.8rem;color:var(--muted);margin-top:.4rem;">Plano, desaturado — necesita LUT o edición</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="use-grid">
+    <div class="use-card"><div class="use-scenario" style="color:var(--cyan);border-color:rgba(79,200,212,.3);">Usa ProRAW cuando</div><div class="use-title">Sesión profesional de fotos</div><div class="use-text">Cliente, producto de alto valor, retrato de marca. Necesitas el mayor margen para la edición final.</div></div>
+    <div class="use-card"><div class="use-scenario" style="color:var(--cyan);border-color:rgba(79,200,212,.3);">Usa Apple Log cuando</div><div class="use-title">Video con post-producción</div><div class="use-text">Si vas a colorizar el video en DaVinci Resolve, Premiere o Final Cut. Log te da más margen de color.</div></div>
+    <div class="use-card"><div class="use-scenario" style="color:var(--muted);border-color:var(--border);">No lo uses cuando</div><div class="use-title">Contenido rápido para redes</div><div class="use-text">Video para Stories, Reels, TikTok directo. El procesado extra no vale si no hay postproducción.</div></div>
+    <div class="use-card"><div class="use-scenario" style="color:var(--gold);border-color:rgba(201,168,76,.3);">LUT (Look-Up Table)</div><div class="use-title">La "receta de color"</div><div class="use-text">Un archivo que transforma el Log plano en un look cinematográfico. Aplicables en Lightroom, DaVinci, LumaFusion.</div></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+  BALANCE DE BLANCOS
+════════════════════════════════════════════ -->
+<section class="section" id="tab-balance">
+  <div class="sec-eyebrow">Término clave · 07</div>
+  <h2 class="sec-title">Balance de<br>Blancos y<br>Temperatura</h2>
+  <p class="sec-desc">El balance de blancos define el "clima emocional" de una imagen. Más allá de la corrección técnica, es una herramienta creativa poderosa.</p>
+
+  <div class="demo-box" style="margin-bottom:2rem;">
+    <div class="demo-title">Escala Kelvin — temperatura de color</div>
+    <div class="wb-strip">
+      <div class="wb-seg" style="background:#f5a020;"><span style="color:#3a2000">2000K<br>Vela</span></div>
+      <div class="wb-seg" style="background:#f8b840;"><span style="color:#3a2800">2700K<br>Tungst.</span></div>
+      <div class="wb-seg" style="background:#ffd080;"><span style="color:#3a3000">3200K<br>Estudio</span></div>
+      <div class="wb-seg" style="background:#fff0b0;"><span style="color:#4a4820">4000K<br>Fluor.</span></div>
+      <div class="wb-seg" style="background:#fff8e8;"><span style="color:#5a5840">5000K<br>Flash</span></div>
+      <div class="wb-seg" style="background:#f8f8ff;"><span style="color:#606068">5500K<br>Luz día</span></div>
+      <div class="wb-seg" style="background:#d8ecff;"><span style="color:#506070">6500K<br>Nublado</span></div>
+      <div class="wb-seg" style="background:#b8d8ff;"><span style="color:#405060">7500K<br>Sombra</span></div>
+      <div class="wb-seg" style="background:#90b8ff;"><span>10000K<br>Cielo</span></div>
+    </div>
+  </div>
+
+  <div class="use-grid">
+    <div class="use-card"><div class="use-scenario" style="color:var(--orange);border-color:rgba(224,120,64,.3);">Cálido (2000–3500K)</div><div class="use-title">Hogar, cercanía, nostalgia</div><div class="use-text">Retratos familiares, gastronomía, café, lifestyle íntimo. Da sensación de seguridad y calidez.</div></div>
+    <div class="use-card"><div class="use-scenario" style="color:var(--cream);border-color:var(--border);">Neutro (4500–6000K)</div><div class="use-title">Producto, comercial, editorial</div><div class="use-text">Muestra los colores reales. Ideal para producto, catálogo, fotografía informativa.</div></div>
+    <div class="use-card"><div class="use-scenario" style="color:var(--blue);border-color:rgba(74,144,226,.3);">Frío (7000K+)</div><div class="use-title">Elegancia, tecnología, ciudad</div><div class="use-text">Arquitectura moderna, branding corporativo, fotografía nocturna de ciudad, tone elegante y distante.</div></div>
+    <div class="use-card"><div class="use-scenario" style="color:var(--gold);border-color:rgba(201,168,76,.3);">En ProRAW</div><div class="use-title">Ajusta sin pérdida en edición</div><div class="use-text">Si disparas en ProRAW, el balance de blancos se puede cambiar completamente en Lightroom sin degradar la imagen.</div></div>
+  </div>
+
+  <div class="exercise">
+    <h3>Temperatura como herramienta creativa</h3>
+    <ul>
+      <li>Fotografía la misma escena con balance de blancos auto.</li>
+      <li>En edición, lleva la temperatura a 2800K (cálido). ¿Cambia la emoción?</li>
+      <li>Lleva la temperatura a 8000K (frío). ¿Sientes algo diferente?</li>
+      <li>Decide cuál temperatura sirve mejor al mensaje que quieres comunicar.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+  VELOCIDAD DE OBTURACIÓN
+════════════════════════════════════════════ -->
+<section class="section" id="tab-velocidad">
+  <div class="sec-eyebrow">Término clave · 08</div>
+  <h2 class="sec-title">Velocidad de<br>Obturación</h2>
+  <p class="sec-desc">La velocidad de obturación controla cuánto tiempo recibe luz el sensor. Es también la herramienta que congela o suaviza el movimiento a tu voluntad.</p>
+
+  <div class="demo-box">
+    <div class="demo-title">Efectos de velocidad de obturación</div>
+    <div class="ss-visual">
+      <div class="ss-card">
+        <div class="ss-motion"><div class="ss-dot frozen"></div></div>
+        <div class="ss-value">1/4000 s</div>
+        <div class="ss-name">Ultra congelado</div>
+        <div class="ss-use">Agua salpicando, animales en vuelo, deporte rápido</div>
+      </div>
+      <div class="ss-card">
+        <div class="ss-motion"><div class="ss-dot frozen"></div></div>
+        <div class="ss-value">1/500 s</div>
+        <div class="ss-name">Congelado</div>
+        <div class="ss-use">Personas caminando, niños jugando, calle</div>
+      </div>
+      <div class="ss-card">
+        <div class="ss-motion"><div class="ss-dot slight"></div></div>
+        <div class="ss-value">1/60 s</div>
+        <div class="ss-name">Límite seguro</div>
+        <div class="ss-use">Retratos estáticos, escena fija</div>
+      </div>
+      <div class="ss-card">
+        <div class="ss-motion"><div class="ss-dot blurry" style="width:40px;"></div></div>
+        <div class="ss-value">1/15 s</div>
+        <div class="ss-name">Motion blur suave</div>
+        <div class="ss-use">Cascadas, gente en movimiento intencional</div>
+      </div>
+      <div class="ss-card">
+        <div class="ss-motion"><div class="ss-dot blurry"></div></div>
+        <div class="ss-value">1–30 s</div>
+        <div class="ss-name">Exposición larga</div>
+        <div class="ss-use">Light painting, tráfico nocturno, estrellas</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule"><div class="rule-eye">Regla práctica para iPhone</div><p>Para retratos sin movimiento: mínimo <strong>1/100 s</strong>. Para sujetos moviéndose: <strong>1/500 s o más rápido</strong>. Para exposición larga creativa usa el modo de larga exposición de Acción en iPhone 17 o apps como Slow Shutter Cam.</p></div>
+
+  <div class="use-grid">
+    <div class="use-card"><div class="use-scenario">1/1000 – 1/4000 s</div><div class="use-title">Deportes, acción, agua</div><div class="use-text">Congela cualquier movimiento. Necesitas buena luz para usar velocidades tan rápidas.</div></div>
+    <div class="use-card"><div class="use-scenario">1/250 – 1/500 s</div><div class="use-title">Personas en movimiento</div><div class="use-text">El rango más versátil para fotografía de calle, eventos y situaciones dinámicas.</div></div>
+    <div class="use-card"><div class="use-scenario">1/60 – 1/125 s</div><div class="use-title">Retratos estáticos</div><div class="use-text">Suficiente si la persona no se mueve. La estabilización óptica del iPhone ayuda mucho aquí.</div></div>
+    <div class="use-card"><div class="use-scenario">Menos de 1/30 s</div><div class="use-title">Creatividad nocturna</div><div class="use-text">Necesitas apoyar el iPhone. Genera motion blur intencional en cascadas, tráfico, luces.</div></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+  TRIÁNGULO DE EXPOSICIÓN
+════════════════════════════════════════════ -->
+<section class="section" id="tab-triangulo">
+  <div class="sec-eyebrow">Concepto integrador</div>
+  <h2 class="sec-title">El Triángulo<br>de la Exposición</h2>
+  <p class="sec-desc">Apertura, velocidad de obturación e ISO son las tres variables que controlan la exposición. Cambia una y debes compensar con otra. Este es el vocabulario completo del control de luz.</p>
+
+  <div class="triangle-wrap">
+    <svg class="tri-svg" viewBox="0 0 460 360">
+      <!-- Triangle -->
+      <polygon points="230,30 430,330 30,330" fill="rgba(79,200,212,0.04)" stroke="rgba(79,200,212,0.3)" stroke-width="1.5"/>
+      <!-- Glow lines -->
+      <line x1="230" y1="30" x2="430" y2="330" stroke="rgba(201,168,76,.15)" stroke-width="1" stroke-dasharray="5,5"/>
+      <line x1="230" y1="30" x2="30" y2="330" stroke="rgba(224,120,64,.15)" stroke-width="1" stroke-dasharray="5,5"/>
+      <line x1="30" y1="330" x2="430" y2="330" stroke="rgba(139,106,205,.15)" stroke-width="1" stroke-dasharray="5,5"/>
+      <!-- Center label -->
+      <circle cx="230" cy="210" r="55" fill="rgba(79,200,212,.06)" stroke="rgba(79,200,212,.2)" stroke-width="1"/>
+      <text x="230" y="204" text-anchor="middle" fill="#4fc8d4" font-family="'Playfair Display',serif" font-size="13" font-weight="700">EXPOSICIÓN</text>
+      <text x="230" y="222" text-anchor="middle" fill="#555" font-family="monospace" font-size="9">luz correcta</text>
+      <!-- Top: Apertura -->
+      <circle cx="230" cy="30" r="42" fill="rgba(201,168,76,.08)" stroke="rgba(201,168,76,.4)" stroke-width="1.5"/>
+      <text x="230" y="24" text-anchor="middle" fill="#c9a84c" font-family="'Playfair Display',serif" font-size="11" font-weight="700">APERTURA</text>
+      <text x="230" y="38" text-anchor="middle" fill="#c9a84c" font-family="monospace" font-size="9">f/</text>
+      <!-- Left: ISO -->
+      <circle cx="30" cy="330" r="42" fill="rgba(224,120,64,.08)" stroke="rgba(224,120,64,.4)" stroke-width="1.5"/>
+      <text x="30" y="325" text-anchor="middle" fill="#e07840" font-family="'Playfair Display',serif" font-size="11" font-weight="700">ISO</text>
+      <text x="30" y="339" text-anchor="middle" fill="#e07840" font-family="monospace" font-size="9">sensib.</text>
+      <!-- Right: Velocidad -->
+      <circle cx="430" cy="330" r="42" fill="rgba(139,106,205,.08)" stroke="rgba(139,106,205,.4)" stroke-width="1.5"/>
+      <text x="430" y="321" text-anchor="middle" fill="#8b6acd" font-family="'Playfair Display',serif" font-size="9" font-weight="700">VELOCIDAD</text>
+      <text x="430" y="334" text-anchor="middle" fill="#8b6acd" font-family="monospace" font-size="8">OBTURACIÓN</text>
+      <text x="430" y="346" text-anchor="middle" fill="#8b6acd" font-family="monospace" font-size="9">1/x seg</text>
+      <!-- Relation arrows -->
+      <text x="145" y="175" text-anchor="middle" fill="#444" font-family="monospace" font-size="8">luz + profundidad</text>
+      <text x="315" y="175" text-anchor="middle" fill="#444" font-family="monospace" font-size="8">luz + movimiento</text>
+      <text x="230" y="350" text-anchor="middle" fill="#444" font-family="monospace" font-size="8">luz + ruido</text>
+    </svg>
+  </div>
+
+  <div class="rule"><div class="rule-eye">La lógica del triángulo</div><p>Si bajas la exposición cerrando apertura (f/ alto), necesitas compensar subiendo ISO o bajando velocidad. Cada variable afecta también algo más allá de la luz: la apertura afecta el desenfoque, la velocidad afecta el movimiento, el ISO afecta el ruido.</p></div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin:2.5rem 0 1rem;">Escenarios y decisiones</h3>
+  <div class="use-grid">
+    <div class="use-card">
+      <div class="use-scenario">Retrato en interior con poca luz</div>
+      <div class="use-title">Apertura máxima + ISO moderado</div>
+      <div class="use-text">Abre al máximo (f/1.78 en iPhone), mantén ISO tan bajo como puedas y ajusta velocidad para no moverte. Resultado: sujeto bien iluminado con fondo suave.</div>
+    </div>
+    <div class="use-card">
+      <div class="use-scenario">Niño corriendo bajo sol</div>
+      <div class="use-title">Velocidad alta + ISO bajo</div>
+      <div class="use-text">Con buena luz puedes usar velocidad alta (1/1000 s) y mantener ISO bajo. El movimiento queda congelado y la imagen limpia.</div>
+    </div>
+    <div class="use-card">
+      <div class="use-scenario">Cascada de día</div>
+      <div class="use-title">Velocidad lenta + apoyo</div>
+      <div class="use-text">Velocidad lenta (1/15 s o menos) para suavizar el agua. Apoya el iPhone en una piedra o usa un mini trípode. ISO al mínimo.</div>
+    </div>
+    <div class="use-card">
+      <div class="use-scenario">Paisaje nocturno urbano</div>
+      <div class="use-title">Night Mode o Exposición larga</div>
+      <div class="use-text">Night Mode del iPhone apila múltiples exposiciones. Para control total, usa exposición larga manual en trípode con apps como Halide.</div>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <h3>El triángulo en práctica</h3>
+    <ul>
+      <li>Encuentra un sujeto en movimiento con buena luz (persona caminando, mercado).</li>
+      <li>Foto 1: Modo automático — deja que el iPhone decida todo.</li>
+      <li>Foto 2: Con app manual, usa ISO 100, velocidad 1/500 — congela el movimiento.</li>
+      <li>Foto 3: ISO 100, velocidad 1/15 — crea motion blur intencional (apoya el iPhone).</li>
+      <li>Compara las tres. ¿Cuál comunica mejor energía? ¿Cuál elegancia? ¿Cuál naturalidad?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+  CHEAT SHEET
+════════════════════════════════════════════ -->
+<section class="section" id="tab-cheatsheet">
+  <div class="sec-eyebrow">Referencia rápida</div>
+  <h2 class="sec-title">Cheat Sheet<br>Técnico Completo</h2>
+  <p class="sec-desc">Una referencia visual de todos los términos del módulo con definición, cuándo usarlos y cómo aplicarlos en tu iPhone 17.</p>
+
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <div class="cheat-term"><div class="cheat-dot" style="background:var(--gold)"></div>Exposición</div>
+      <div class="cheat-abbr">EV — Exposure Value</div>
+      <div class="cheat-def">Cantidad de luz que llega al sensor. Determina si la foto queda oscura, correcta o quemada.</div>
+      <div class="cheat-when">Cuándo ajustar</div>
+      <div class="cheat-use">Siempre que haya contraste entre sujeto y fondo. Toca el sujeto en pantalla.</div>
+    </div>
+    <div class="cheat-card">
+      <div class="cheat-term"><div class="cheat-dot" style="background:var(--cyan)"></div>Apertura</div>
+      <div class="cheat-abbr">f/ — Número f</div>
+      <div class="cheat-def">Tamaño del diafragma. Controla luz y profundidad de campo. f/ bajo = más luz + fondo desenfocado.</div>
+      <div class="cheat-when">En iPhone</div>
+      <div class="cheat-use">Usa Modo Retrato para simular f/ amplio. Ajusta el deslizador de f/ en pantalla (f/1.4–f/16).</div>
+    </div>
+    <div class="cheat-card">
+      <div class="cheat-term"><div class="cheat-dot" style="background:var(--orange)"></div>ISO</div>
+      <div class="cheat-abbr">ISO — Sensibilidad</div>
+      <div class="cheat-def">Amplificación de la señal de luz. ISO alto = más luz pero más ruido (grano digital).</div>
+      <div class="cheat-when">Cuándo vigilar</div>
+      <div class="cheat-use">En baja luz, el iPhone sube ISO automáticamente. Contrarresta con Night Mode o más fuente de luz.</div>
+    </div>
+    <div class="cheat-card">
+      <div class="cheat-term"><div class="cheat-dot" style="background:var(--purple)"></div>Resolución</div>
+      <div class="cheat-abbr">MP — Megapíxeles</div>
+      <div class="cheat-def">Número de píxeles de la imagen. Más MP = más detalle para imprimir o recortar. No mejora la luz.</div>
+      <div class="cheat-when">Regla práctica</div>
+      <div class="cheat-use">12 MP para redes. 48 MP para impresión o recorte. ProRAW 48 MP para trabajo profesional.</div>
+    </div>
+    <div class="cheat-card">
+      <div class="cheat-term"><div class="cheat-dot" style="background:var(--green)"></div>HDR</div>
+      <div class="cheat-abbr">High Dynamic Range</div>
+      <div class="cheat-def">Rango dinámico alto: más detalle en sombras Y luces simultáneamente. Requiere pantalla HDR.</div>
+      <div class="cheat-when">Cuándo activar</div>
+      <div class="cheat-use">Escenas de alto contraste. Desactiva si entregas a plataformas o impresión sin soporte HDR.</div>
+    </div>
+    <div class="cheat-card">
+      <div class="cheat-term"><div class="cheat-dot" style="background:var(--muted)"></div>SDR</div>
+      <div class="cheat-abbr">Standard Dynamic Range</div>
+      <div class="cheat-def">Rango estándar de brillo. Compatible con cualquier pantalla. Menos detalle en extremos.</div>
+      <div class="cheat-when">Cuándo usar</div>
+      <div class="cheat-use">Cuando el destino final es una pantalla antigua, impresión estándar o plataforma sin soporte HDR.</div>
+    </div>
+    <div class="cheat-card">
+      <div class="cheat-term"><div class="cheat-dot" style="background:var(--blue)"></div>Log / Apple Log</div>
+      <div class="cheat-abbr">Logarithmic Color Profile</div>
+      <div class="cheat-def">Perfil de imagen plano y desaturado que preserva máxima información para editar en postproducción.</div>
+      <div class="cheat-when">Cuándo usar</div>
+      <div class="cheat-use">Solo si harás post-producción seria de video. No lo uses para video directo a publicar.</div>
+    </div>
+    <div class="cheat-card">
+      <div class="cheat-term"><div class="cheat-dot" style="background:var(--cyan)"></div>ProRAW</div>
+      <div class="cheat-abbr">Professional RAW</div>
+      <div class="cheat-def">Formato fotográfico que captura datos crudos del sensor. Máxima flexibilidad de edición. Archivo grande.</div>
+      <div class="cheat-when">Cuándo usar</div>
+      <div class="cheat-use">Sesiones profesionales, trabajo para cliente, escenas de alto contraste, cuando la calidad lo justifica.</div>
+    </div>
+    <div class="cheat-card">
+      <div class="cheat-term"><div class="cheat-dot" style="background:var(--gold)"></div>Balance de Blancos</div>
+      <div class="cheat-abbr">WB — Kelvin (K)</div>
+      <div class="cheat-def">Temperatura de color de la imagen. Cálido (naranja) o frío (azul). Herramienta técnica y creativa.</div>
+      <div class="cheat-when">Cuándo ajustar</div>
+      <div class="cheat-use">Siempre en edición para definir el clima emocional. En HEIF el auto es bueno; en ProRAW tienes control total.</div>
+    </div>
+    <div class="cheat-card">
+      <div class="cheat-term"><div class="cheat-dot" style="background:var(--red)"></div>Velocidad de Obturación</div>
+      <div class="cheat-abbr">SS — Shutter Speed · 1/x s</div>
+      <div class="cheat-def">Tiempo que el sensor recibe luz. Rápida = congela movimiento. Lenta = desenfoca movimiento.</div>
+      <div class="cheat-when">En iPhone</div>
+      <div class="cheat-use">Night Mode usa velocidades lentas automáticamente. Para control total usa Halide o modo manual.</div>
+    </div>
+    <div class="cheat-card">
+      <div class="cheat-term"><div class="cheat-dot" style="background:var(--purple)"></div>Dolby Vision</div>
+      <div class="cheat-abbr">Dolby Vision HDR</div>
+      <div class="cheat-def">El estándar de mayor calidad de video HDR. El iPhone 17 graba en Dolby Vision automáticamente.</div>
+      <div class="cheat-when">Cuándo importa</div>
+      <div class="cheat-use">YouTube, Apple TV+, Netflix y reproductores modernos lo soportan. Para presentaciones corporativas evalúa si aplica.</div>
+    </div>
+    <div class="cheat-card">
+      <div class="cheat-term"><div class="cheat-dot" style="background:var(--orange)"></div>LUT</div>
+      <div class="cheat-abbr">Look-Up Table</div>
+      <div class="cheat-def">Archivo de color que transforma un perfil Log plano en un look cinematográfico. La "receta de color".</div>
+      <div class="cheat-when">Herramientas</div>
+      <div class="cheat-use">Aplica LUTs en DaVinci Resolve, LumaFusion, Final Cut Pro o Lightroom (como perfil de cámara).</div>
+    </div>
+  </div>
+
+  <div class="quote" style="margin-top:3rem;">
+    <p>El vocabulario técnico no es para impresionar. Es para tomar decisiones más rápido y con más intención cuando tienes el iPhone en la mano.</p>
+  </div>
+
+  <div style="text-align:center;margin-top:3rem;">
+    <button class="btn-p" onclick="goTo('glosario')">← Ver Glosario Completo</button>
+    &nbsp;
+    <button class="btn-g" onclick="goTo('triangulo')">Triángulo de Exposición</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">Fotografía iPhone 17 — Parte 2</div>
+  <div class="footer-meta">Lenguaje Técnico · 18 Términos · 6 Módulos<br>Nivel Intermedio a Profesional</div>
+</footer>
+
+<script>
+// ── NAV ──
+function goTo(id) {
+  document.getElementById('heroSec').style.display = 'none';
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const el = document.getElementById('tab-' + id);
+  if (el) { el.classList.add('active'); el.scrollIntoView({behavior:'smooth',block:'start'}); }
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) b.classList.add('active');
+  });
+  updateProgress();
+}
+
+// ── PROGRESS ──
+function updateProgress() {
+  const secs = document.querySelectorAll('.section');
+  let idx = 0;
+  secs.forEach((s,i) => { if(s.classList.contains('active')) idx = i; });
+  document.getElementById('pBar').style.width = ((idx/(secs.length-1))*100)+'%';
+}
+
+// ── TERM ACCORDION ──
+function toggleTerm(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+// ── TOGGLE PANEL (HDR/SDR) ──
+function switchPanel(id, btn) {
+  document.querySelectorAll('.tc-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tc-btn').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('panel-' + id);
+  if (panel) panel.classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── EXPOSURE SIMULATOR ──
+function expHintText(v) {
+  const n = parseFloat(v);
+  if (n <= -2.5) return 'Muy subexpuesto — imagen muy oscura, pierde detalle en sombras';
+  if (n <= -1.5) return 'Subexpuesto — útil para preservar detalle en luces brillantes';
+  if (n <= -0.5) return 'Ligeramente oscuro — puede ser intencional para atmósfera';
+  if (n < 0.5) return 'Exposición neutra — punto de partida recomendado';
+  if (n < 1.5) return 'Ligeramente brillante — útil para piel clara y fondos blancos';
+  if (n < 2.5) return 'Sobreexpuesto — las altas luces empiezan a quemarse';
+  return 'Muy sobreexpuesto — imagen quemada, pierde detalle en luces';
+}
+
+function updateExp(v) {
+  const n = parseFloat(v);
+  const brightness = 1 + n * 0.28;
+  const scene = document.getElementById('expScene');
+  if (scene) scene.style.filter = `brightness(${Math.max(0.05, brightness)})`;
+  const val = document.getElementById('expVal');
+  if (val) val.textContent = (n >= 0 ? '+' : '') + n.toFixed(1) + ' EV';
+  const hint = document.getElementById('expHint');
+  if (hint) hint.textContent = expHintText(v);
+}
+
+function updateExp2(v) {
+  const n = parseFloat(v);
+  const brightness = 1 + n * 0.28;
+  const scene = document.getElementById('expScene2');
+  if (scene) scene.style.filter = `brightness(${Math.max(0.05, brightness)})`;
+  const val = document.getElementById('expVal2');
+  if (val) val.textContent = (n >= 0 ? '+' : '') + n.toFixed(1) + ' EV';
+  const hint = document.getElementById('expHint2');
+  if (hint) hint.textContent = expHintText(v);
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('heroSec').style.display = 'flex';
+  updateProgress();
+});
+</script>
+</body>
+</html>
